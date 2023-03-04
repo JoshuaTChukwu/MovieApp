@@ -1,6 +1,6 @@
-﻿using GOSBackend.SqlTables;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MovieApp.SqlTables;
 
 namespace MovieApp.Data
 {
@@ -11,8 +11,7 @@ namespace MovieApp.Data
 
         public DataBaseContext(DbContextOptions<DataBaseContext> options)
             : base(options) { }
-        public virtual DbSet<HelpContents> HelpContents { get; set; }
-        public virtual DbSet<HelpContentTasks> HelpContentTasks { get; set; }
+   
         public virtual DbSet<RefreshToken> RefreshToken { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

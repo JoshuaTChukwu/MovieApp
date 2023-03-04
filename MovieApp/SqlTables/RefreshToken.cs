@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace GOSBackend.SqlTables
+namespace MovieApp.SqlTables
 {
     public class RefreshToken
     {

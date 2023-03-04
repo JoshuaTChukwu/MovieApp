@@ -52,7 +52,7 @@ namespace GOSBackend.Controllers
             try
             {
                 var response = await _auth.VerifyAdminRegister(model);
-                if (response.Status.IsSuccessful)
+                if (response.Status.IsSuccess)
                     return Ok(response);
                 return BadRequest(response);
             }
@@ -63,13 +63,13 @@ namespace GOSBackend.Controllers
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 return BadRequest(new AuthResponse
                 {
-                    Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage { FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message, MessageId = errorCode } }
+                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "", ErrorCode = errorCode  }
                 });
             }
         }
 
 
-        [HttpPost(APIRoutes.Admin.ADMIN_LOGIN)]
+        [HttpPost(APIRoutes.Users.USER_LOGIN)]
         public async Task<ActionResult<AuthenticationResult>> LoginAdmin([FromBody] LoginCommand model)
         {
             try

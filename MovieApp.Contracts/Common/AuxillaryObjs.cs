@@ -18,6 +18,7 @@ namespace MovieApp.Contracts.Common
         }
         public class AuthenticationResult
         {
+            public string Token { get; set; } = string.Empty;
             public ApiResponse Status { get; set; } = new ApiResponse();
         }    
         public class AuthResponse

@@ -1,12 +1,12 @@
 ﻿using GOSBackend.Handlers;
 using GOSBackend.Requests;
-using GOSBackend.SqlTables;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MovieApp.Configurations;
 using MovieApp.Data;
 using MovieApp.Helpers;
+using MovieApp.SqlTables;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -62,7 +62,7 @@ namespace GOSBackend.IdentityServices
                     UserName = model.UserName,
                     FullName = model.FullName,
                     EmailConfirmed = false,
-                    IsActivatad = false,
+                   
                    
                 };
                 var register = await _userManager.CreateAsync(newUser,model.Password);
@@ -78,7 +78,7 @@ namespace GOSBackend.IdentityServices
                             {
 
                                 new Claim("email",model.Email),
-                                new Claim("securedpin","GOSHardcoreSecurer@#123")
+                                new Claim("securedpin","SecurerPassage@#123")
                             };
                 var token = CreateToken(claims);
                 var link = $"{_uri.SelfClient}/verify?g={token}";
@@ -127,8 +127,8 @@ namespace GOSBackend.IdentityServices
                 }
 
                
-                user_account.AdminActivated = true;
-                user_account.IsActivatad = true;
+                user_account.EmailConfirmed = true;
+              
                 await _userManager.UpdateAsync(user_account);
                 var content3 = new StringBuilder();
                 content3.Append("<p> Your account has been validated</p>");
@@ -221,24 +221,25 @@ namespace GOSBackend.IdentityServices
 
 
                 var result = await _login.ClientLoginAsync(users);
-                if (result.Status.IsSuccessful == false)
+                if (result.Status.IsSuccess == false)
                 {
                     response.Status.IsSuccess = false;
-                    response.Status.Message = result.Status.Message;
+                    response.Status.FriendlyMessage = result.Status.FriendlyMessage;
+                    response.Status.TechnicalMessage = result.Status.TechnicalMessage;
                     return response;
                 }
 
-                response.Status.IsSuccessful = true;
+                response.Status.IsSuccess = true;
                 response.Token = result.Token;
-                response.RefreshToken = result.RefreshToken;
                 return response;
             }
             catch (Exception ex)
             {
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
-                response.Status.Message.FriendlyMessage = ex?.Message ?? ex?.InnerException?.Message;
-                response.Status.Message.TechnicalMessage = ex?.ToString();
+                response.Status.FriendlyMessage = $"An error occured, Kindly submit this issue with id {errorCode} to the Admin";
+                response.Status.TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "";
+                response.Status.ErrorCode = errorCode;
                 return response;
             }
         }

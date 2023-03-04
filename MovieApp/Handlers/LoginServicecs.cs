@@ -1,14 +1,13 @@
-﻿using GOSBackend.Data;
-using GOSBackend.SqlTables;
-using GOSLibraries.GOS_API_Response;
-using GOSLibraries.GOS_Error_logger.Service;
-using GOSLibraries.GOS_Financial_Identity;
-using GOSLibraries.Options;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using MovieApp.Configurations;
+using MovieApp.Data;
+using MovieApp.Helpers;
+using MovieApp.SqlTables;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
 
 namespace GOSBackend.Handlers
 {
@@ -17,9 +16,9 @@ namespace GOSBackend.Handlers
         private readonly ILogger<LoginServicecs> _logger;
         private readonly IConfiguration _configuration;
         private readonly DataBaseContext _dbContext;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJwtSettings _jwtSettings;
         public readonly UserManager<Users> _userManager;
-        public LoginServicecs(ILogger<LoginServicecs> logger, IConfiguration configuration, DataBaseContext dataBaseContext, JwtSettings jwtSettings, UserManager<Users> userManager)
+        public LoginServicecs(ILogger<LoginServicecs> logger, IConfiguration configuration, DataBaseContext dataBaseContext, IJwtSettings jwtSettings, UserManager<Users> userManager)
         {
             _logger = logger;
             _configuration = configuration;
@@ -42,14 +41,14 @@ namespace GOSBackend.Handlers
                 return new AuthenticationResult
                 {
 
-                    Status = new APIResponseStatus
+                    Status = new ApiResponse
                     {
-                        Message = new APIResponseMessage
-                        {
+                       
                             FriendlyMessage = "Error occured!! Please try again later",
-                            MessageId = errorCode,
+                            ErrorCode = errorCode,
+                            IsSuccess =false,
                             TechnicalMessage = $"ErrorID : LoginAsync{errorCode} Ex : {ex?.Message ?? ex?.InnerException?.Message} ErrorStack : {ex?.StackTrace}"
-                        }
+                        
                     }
                 };
                 #endregion
@@ -71,7 +70,7 @@ namespace GOSBackend.Handlers
                     new Claim("userId", user.Id),
                     new Claim("securedERPuser", "clientAdmin") ,
                     new Claim("loginId", user.UserName) ,
-                    new Claim("userType",user.UserType.ToString())
+                    
                 };
                
 
@@ -114,13 +113,12 @@ namespace GOSBackend.Handlers
                 {
                     return new AuthenticationResult
                     {
-                        Status = new APIResponseStatus
+                        Status = new ApiResponse
                         {
-                            IsSuccessful = false,
-                            Message = new APIResponseMessage
-                            {
-                                FriendlyMessage = ex?.InnerException?.Message,
-                            }
+                            IsSuccess = false,
+                            
+                                FriendlyMessage = ex?.InnerException?.Message ?? ex?.Message ??"",
+                            
                         }
                     };
                 }
@@ -128,8 +126,7 @@ namespace GOSBackend.Handlers
                 return new AuthenticationResult
                 {
                     Token = tokenHandler.WriteToken(token),
-                    RefreshToken = refreshToken.Token,
-                    Status = new APIResponseStatus { IsSuccessful = true, Message = new APIResponseMessage() }
+                    Status = new ApiResponse { IsSuccess = true }
                 };
             }
             catch (Exception ex)
@@ -140,14 +137,13 @@ namespace GOSBackend.Handlers
                 return new AuthenticationResult
                 {
 
-                    Status = new APIResponseStatus
-                    {
-                        Message = new APIResponseMessage
-                        {
+                    Status = new ApiResponse
+                    { 
+                            IsSuccess = false,
                             FriendlyMessage = "Error occured!! Please try again later",
-                            MessageId = errorCode,
+                            ErrorCode = errorCode,
                             TechnicalMessage = $"ErrorID :{errorCode} Ex : {ex?.Message ?? ex?.InnerException?.Message} ErrorStack : {ex?.StackTrace}"
-                        }
+                        
                     }
                 };
                 #endregion
