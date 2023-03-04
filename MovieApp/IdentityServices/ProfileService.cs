@@ -4,7 +4,7 @@ using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 using static MovieApp.Contracts.Common.AuxillaryObjs;
 using MovieApp.Helpers;
 
-namespace GOSBackend.IdentityServices
+namespace MovieApp.IdentityServices
 {
     public class ProfileService  : IProfileService
     {

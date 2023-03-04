@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using static MovieApp.Contracts.Common.AuxillaryObjs;
 
-namespace GOSBackend.Handlers
+namespace MovieApp.Handlers
 {
     public class LoginServicecs : ILoginServices
     {

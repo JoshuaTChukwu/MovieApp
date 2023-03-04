@@ -1,11 +1,11 @@
 ﻿using GOSBackend.Handlers;
-using GOSBackend.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MovieApp.Configurations;
 using MovieApp.Data;
 using MovieApp.Helpers;
+using MovieApp.Requests;
 using MovieApp.SqlTables;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
@@ -15,7 +15,7 @@ using System.Text;
 using static MovieApp.Contracts.Common.AuxillaryObjs;
 using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
-namespace GOSBackend.IdentityServices
+namespace MovieApp.IdentityServices
 {
     public class AuthService : IAuthService
     {

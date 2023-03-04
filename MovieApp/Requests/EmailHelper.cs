@@ -2,9 +2,9 @@
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
-using static GOSBackend.Contracts.Common.AuxillaryObjs;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
 
-namespace GOSBackend.Requests
+namespace MovieApp.Requests
 {
     public class EmailHelper : IEmailHelper
     {

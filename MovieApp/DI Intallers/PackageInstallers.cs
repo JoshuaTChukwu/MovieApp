@@ -54,7 +54,6 @@ namespace GOSBackend.DI_Intallers
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<DataBaseContext>();
-            services.AddSingleton<ILoggerService, LoggerService>();
             services.AddSingleton<IBaseURIs>(configuration.GetSection("BaseURIs").Get<BaseURIs>());
             services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
             services.AddSingleton<IJwtSettings>(configuration.GetSection("EmailConfiguration").Get<JwtSettings>());

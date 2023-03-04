@@ -1,6 +1,6 @@
 ﻿using GOSBackend.Handlers;
-using GOSBackend.IdentityServices;
-using GOSBackend.Requests;
+using MovieApp.IdentityServices;
+using MovieApp.Requests;
 
 namespace GOSBackend.DI_Intallers
 {

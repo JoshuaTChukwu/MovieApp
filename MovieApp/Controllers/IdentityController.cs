@@ -1,8 +1,8 @@
-using GOSBackend.Handlers;
-using GOSBackend.IdentityServices;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Contracts.Common;
+using MovieApp.Handlers;
 using MovieApp.Helpers;
+using MovieApp.IdentityServices;
 using static MovieApp.Contracts.Common.AuxillaryObjs;
 using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 

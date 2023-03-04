@@ -1,12 +1,11 @@
-﻿using GOSLibraries.GOS_API_Response;
-using GOSLibraries;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace GOSBackend.Handlers
+namespace MovieApp.Handlers
 {
     public class AuthorizationMethodAttribute : Attribute, IAsyncActionFilter
     {

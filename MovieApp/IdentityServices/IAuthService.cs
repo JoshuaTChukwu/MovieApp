@@ -1,7 +1,7 @@
 ﻿using static MovieApp.Contracts.Common.AuxillaryObjs;
 using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
-namespace GOSBackend.IdentityServices
+namespace MovieApp.IdentityServices
 {
     public interface IAuthService
     {
