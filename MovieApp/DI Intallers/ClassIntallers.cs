@@ -1,4 +1,4 @@
-﻿using GOSBackend.Handlers;
+﻿using MovieApp.Handlers;
 using MovieApp.IdentityServices;
 using MovieApp.Requests;
 

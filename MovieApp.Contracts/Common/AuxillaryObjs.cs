@@ -20,7 +20,11 @@ namespace MovieApp.Contracts.Common
         {
             public string Token { get; set; } = string.Empty;
             public ApiResponse Status { get; set; } = new ApiResponse();
-        }    
+        }  
+        public class MiddlewareResponse
+        {
+            public ApiResponse Status { get; set; } = new ApiResponse();
+        }
         public class AuthResponse
         {
             public ApiResponse Status { get; set; } = new ApiResponse();

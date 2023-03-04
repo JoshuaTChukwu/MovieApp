@@ -1,9 +1,9 @@
-﻿using GOSBackend.Handlers;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MovieApp.Configurations;
 using MovieApp.Data;
+using MovieApp.Handlers;
 using MovieApp.Helpers;
 using MovieApp.Requests;
 using MovieApp.SqlTables;

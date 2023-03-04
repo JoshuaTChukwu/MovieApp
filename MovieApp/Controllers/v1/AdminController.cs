@@ -1,7 +1,6 @@
-﻿using GOSBackend.Handlers;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
+using MovieApp.Handlers;
 
 namespace GOSBackend.Controllers.v1
 {

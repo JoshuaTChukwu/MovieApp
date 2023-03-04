@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
 
 namespace MovieApp.Handlers
 {
@@ -11,7 +12,7 @@ namespace MovieApp.Handlers
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var response = new MiddlewareResponse { Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage() } };
+            var response = new MiddlewareResponse { Status = new ApiResponse { IsSuccess = false, } };
             string userId = context.HttpContext.User?.FindFirst("userId")?.Value ?? string.Empty;
             StringValues authHeader = context.HttpContext.Request.Headers["Authorization"];
 
