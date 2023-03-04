@@ -91,13 +91,13 @@ namespace GOSBackend.Controllers
             }
         }
         [AuthorizationMethod]
-        [HttpGet(APIRoutes.Admin.ADMIN_PROFILE_GET)]
-        public async Task<ActionResult<UserAdminProfileResObj>> GetAdminProfile()
+        [HttpGet(APIRoutes.Users.USER_PROFILE_GET)]
+        public async Task<ActionResult<UserProfileResObj>> GetAdminProfile()
         {
             try
             {
                 var response = await _profile.GetAdminProfile();
-                if (response.Status.IsSuccessful)
+                if (response.Status.IsSuccess)
                     return Ok(response);
                 return BadRequest(response);
             }
@@ -106,9 +106,9 @@ namespace GOSBackend.Controllers
 
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
-                return BadRequest(new UserAdminProfileResObj
+                return BadRequest(new UserProfileResObj
                 {
-                    Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage { FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message, MessageId = errorCode } }
+                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "", ErrorCode = errorCode }
                 });
             }
         }

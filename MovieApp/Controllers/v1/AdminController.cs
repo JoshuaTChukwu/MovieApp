@@ -1,5 +1,4 @@
 ﻿using GOSBackend.Handlers;
-using GOSBackend.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +10,12 @@ namespace GOSBackend.Controllers.v1
     {
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly ILogger<AdminController> _logger;
-        private readonly IAdminServices _service;
-        public AdminController(IAdminServices adminServices, IHttpContextAccessor httpContextAccessor, ILogger<AdminController> logger)
+    
+        public AdminController(IHttpContextAccessor httpContextAccessor, ILogger<AdminController> logger)
         {
           _contextAccessor = httpContextAccessor;
             _logger = logger;
-            _service = adminServices;
+            
         }
         //[HttpPost(APIRoutes.Admin.ADD_HELP)]
         //public async Task<ActionResult<HelpAddResObj>> AddUpdateHelpContent([FromBody] HelpAddModel model)
