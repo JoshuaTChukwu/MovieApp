@@ -60,6 +60,27 @@ namespace MovieApp.Repository.Implements
             }
             throw new Exception("Movie not found");
         }
+
+        public SingleSearchResponseObj GetMovie(string searchId)
+        {
+            var response = new SingleSearchResponseObj
+            {
+                Status = new ApiResponse
+                {
+                    IsSuccess = false
+                }
+            };
+            var movies = _api.GetSingleMovie(searchId).Result;
+            if (movies.Response.ToLower() == "true")
+            {
+                response.Response = movies;
+               
+                response.Status.FriendlyMessage = "Search succesful";
+                response.Status.IsSuccess = true;
+                return response;
+            }
+            throw new Exception("Movie not found");
+        }
         public IEnumerable<string> lastLatestSearch()
         {
             var response = (from a in _dBContext.MovieSearch

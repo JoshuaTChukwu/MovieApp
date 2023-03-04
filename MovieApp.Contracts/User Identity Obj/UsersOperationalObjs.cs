@@ -24,5 +24,12 @@ namespace MovieApp.Contracts.User_Identity_Obj
 
            public ApiResponse Status { get; set; } = new ApiResponse();
         }
+
+        public class SingleSearchResponseObj
+        {
+            public OmdbSingleResult Response { get; set; } = new OmdbSingleResult();
+
+            public ApiResponse Status { get; set; } = new ApiResponse();
+        }
     }
 }
