@@ -21,7 +21,13 @@ namespace MovieApp.Contracts.User_Identity_Obj
             public string Token { get; set; }= string.Empty;
           
         }
-      
+        public class LoginCommand
+        {
+            public string UserName { get; set; }= string.Empty;
+            public string Password { get; set; }= string.Empty;
+        }
+
+
         public class UserAdminProfileObj
         {
             public string FullName { get; set; }= string.Empty;

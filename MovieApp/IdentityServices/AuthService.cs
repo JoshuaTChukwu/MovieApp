@@ -92,15 +92,16 @@ namespace GOSBackend.IdentityServices
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 response.Status.IsSuccess = false;
-                response.Status.FriendlyMessage = "An Unexpected error occured";
-                response.Status.TechnicalMessage = ex?.Message;
+                response.Status.FriendlyMessage = $"An error occured, Kindly submit this issue with id {errorCode} to the Admin";
+                response.Status.TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "";
+                response.Status.ErrorCode = errorCode;
                 return response;
             }
         }
 
         public async Task<AuthResponse> VerifyAdminRegister(VerifyObj request)
         {
-            var response = new AuthResponse { Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage() } };
+            var response = new AuthResponse { Status = new ApiResponse { IsSuccess = false, } };
             try
             {
                 string token = request.Token.Replace("Bearer ", "").Trim();
@@ -110,18 +111,18 @@ namespace GOSBackend.IdentityServices
                 var email = tokena.Claims.First(x => x.Type == "email");
                 if (securedPin.Value == null || securedPin.Value != "SecurerPassage@#123" || email.Value == null)
                 {
-                    response.Status.Message.FriendlyMessage = "verification failed, please try again";
+                    response.Status.FriendlyMessage = "verification failed, please try again";
                     return response;
                 }
                 if (tokena.ValidTo < DateTime.Now)
                 {
-                    response.Status.Message.FriendlyMessage = "Verification link expired, please try again";
+                    response.Status.FriendlyMessage = "Verification link expired, please try again";
                     return response;
                 }
                 var user_account = await _userManager.FindByEmailAsync(email.Value);
                 if (user_account == null)
                 {
-                    response.Status.Message.FriendlyMessage = "User Account does not exist";
+                    response.Status.FriendlyMessage = "User Account does not exist";
                     return response;
                 }
 
@@ -137,16 +138,17 @@ namespace GOSBackend.IdentityServices
                 var link = $"{_uri.SelfClient}/login";
                 body2 = body2.Replace("{Name}", user_account.FullName).Replace("{Link}", link).Replace("{Body}", content3.ToString()).Replace("{Button}", "Login");
                 var mail = _email.SendMail(user_account.Email, user_account.FullName, "Account Activation", body2);
-                response.Status.IsSuccessful = true;
-                response.Status.Message.FriendlyMessage = "Account activated";
+                response.Status.IsSuccess = true;
+                response.Status.FriendlyMessage = "Account activated";
                 return response;
             }
             catch (Exception ex)
             {
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
-                response.Status.Message.FriendlyMessage = ex?.Message ?? ex?.InnerException?.Message;
-                response.Status.Message.TechnicalMessage = ex?.ToString();
+                response.Status.FriendlyMessage = $"An error occured, Kindly submit this issue with id {errorCode} to the Admin" ;
+                response.Status.TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "";
+                response.Status.ErrorCode = errorCode;
                 return response;
             }
         }
@@ -177,7 +179,7 @@ namespace GOSBackend.IdentityServices
 
         public async Task<AuthResponse> LoginAdmin(LoginCommand request)
         {
-            var response = new AuthResponse { Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage() } };
+            var response = new AuthResponse { Status = new ApiResponse { IsSuccess = false,  } };
             try
             {
                 Users? user_acccount = new Users();
@@ -198,38 +200,30 @@ namespace GOSBackend.IdentityServices
 
                 if (!await UserExist(request, user_acccount))
                 {
-                    response.Status.Message.FriendlyMessage = "User does not exist";
+                    response.Status.FriendlyMessage = "User does not exist";
                     return response;
                 }
                 Users users = user_acccount ?? new Users();
                 if (!await IsValidPassword(request, users))
                 {
-                    response.Status.Message.FriendlyMessage = "User/Password Combination is wrong";
+                    response.Status.FriendlyMessage = "User/Password Combination is wrong";
                     return response;
                 }
 
-                if ((UserType)users.UserType != UserType.Admin)
-                {
-                    response.Status.Message.FriendlyMessage = "User  not lincesed to login here";
-                    return response;
-                }
+               
                 if(users.EmailConfirmed == false)
                 {
-                    response.Status.Message.FriendlyMessage = "Kindly Comfirm your Email";
+                    response.Status.FriendlyMessage = "Kindly Comfirm your Email";
                     return response;
                 }
-                if (users.IsActivatad == false)
-                {
-                    response.Status.Message.FriendlyMessage = "Account not yet activated, see admin for details";
-                    return response;
-                }
+                
 
 
 
                 var result = await _login.ClientLoginAsync(users);
                 if (result.Status.IsSuccessful == false)
                 {
-                    response.Status.IsSuccessful = false;
+                    response.Status.IsSuccess = false;
                     response.Status.Message = result.Status.Message;
                     return response;
                 }
