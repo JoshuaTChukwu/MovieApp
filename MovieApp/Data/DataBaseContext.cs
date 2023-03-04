@@ -13,7 +13,7 @@ namespace MovieApp.Data
             : base(options) { }
    
         public virtual DbSet<RefreshToken> RefreshToken { get; set; }
-
+        public virtual DbSet<MovieSearch> MovieSearch { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
