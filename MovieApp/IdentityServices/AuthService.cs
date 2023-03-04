@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MovieApp.Configurations;
 using MovieApp.Data;
+using MovieApp.Helpers;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.IdentityModel.Tokens.Jwt;
@@ -97,7 +98,7 @@ namespace GOSBackend.IdentityServices
             }
         }
 
-        public async Task<AuthResponse> VerifyAdminRegister(AdminVerifyObj request)
+        public async Task<AuthResponse> VerifyAdminRegister(VerifyObj request)
         {
             var response = new AuthResponse { Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage() } };
             try
@@ -107,7 +108,7 @@ namespace GOSBackend.IdentityServices
                 var tokena = handler.ReadJwtToken(token);
                 var securedPin = tokena.Claims.First(x => x.Type == "securedpin");
                 var email = tokena.Claims.First(x => x.Type == "email");
-                if (securedPin.Value == null || securedPin.Value != "GOSHardcoreSecurer@#123" || email.Value == null)
+                if (securedPin.Value == null || securedPin.Value != "SecurerPassage@#123" || email.Value == null)
                 {
                     response.Status.Message.FriendlyMessage = "verification failed, please try again";
                     return response;
@@ -124,53 +125,13 @@ namespace GOSBackend.IdentityServices
                     return response;
                 }
 
-                if (request.TokenType == TokenType.AdminUser)
-                {
-                    user_account.EmailConfirmed = true;
-                    await _userManager.UpdateAsync(user_account);
-                    var claims = new List<Claim>
-                            {
-
-                                new Claim("email",email.Value),
-                                new Claim("securedpin","GOSHardcoreSecurer@#123"),
-                                new Claim("IsAdmin","true")
-                            };
-
-
-                    var newToken = CreateToken(claims);
-                    var name = "Admin";
-                    var baseUrl = _uri.SelfClient;
-
-                    var url = baseUrl + "/verify?g=" + newToken + "&type=2";
-                    var content = new StringBuilder();
-                    content.Append($"<p>Kindly comfirm that {user_account.FullName} with email: {user_account.Email} is a licensed user. Click the button below </p>");
-                    content.Append("<p>Once verified. Users will become admin </p>");
-                    var filePath = String.Concat(_environment.WebRootPath, "/mailTemplateWithButton.html");
-                    var body =  File.ReadAllText(filePath);
-                    body = body.Replace("{Name}", name).Replace("{Link}", url).Replace("{Body}", content.ToString()).Replace("{Button}", "Verify");
-
-                    var list = "abimbola.okekumata@godp.co.uk;samuel.yekini@godp.co.uk;info@godp.com.ng";
-                    var addressList = list.Split(";").ToList();
-                    foreach(var address in addressList)
-                    {
-                        var res = _email.SendMail(address, name, "Admin Verification", body);
-                    }
-                   
-                    response.Status.Message.FriendlyMessage = "Account verified, Request sent to admin to activate";
-                    response.Status.IsSuccessful = true;
-                    return response;
-                }
-                var isAdmin = tokena.Claims.First(x => x.Type == "IsAdmin");
-                if (isAdmin == null || isAdmin.Value != "true")
-                {
-                    response.Status.Message.FriendlyMessage = "This request is not from an admin";
-                }
+               
                 user_account.AdminActivated = true;
                 user_account.IsActivatad = true;
                 await _userManager.UpdateAsync(user_account);
                 var content3 = new StringBuilder();
                 content3.Append("<p> Your account has been validated</p>");
-                content3.Append("<p>You can now login to the admin page</p>");
+                content3.Append("<p>You can now login</p>");
                 
                 var body2 =File.ReadAllText(String.Concat(_environment.WebRootPath, "/mailTemplateWithButton.html"));
                 var link = $"{_uri.SelfClient}/login";

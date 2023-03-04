@@ -19,6 +19,11 @@ namespace MovieApp.Contracts.Common
         public class AuthenticationResult
         {
             public ApiResponse Status { get; set; } = new ApiResponse();
+        }    
+        public class AuthResponse
+        {
+            public ApiResponse Status { get; set; } = new ApiResponse();
+            public string Token { get; set; } = string.Empty;
         }
         public enum Gender
         {

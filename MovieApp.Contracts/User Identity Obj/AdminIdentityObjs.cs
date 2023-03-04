@@ -16,16 +16,12 @@ namespace MovieApp.Contracts.User_Identity_Obj
             public string Email { get; set; }= string.Empty;
             public string FullName { get; set; }= string.Empty;
         }
-        public class AdminVerifyObj
+        public class VerifyObj
         {
             public string Token { get; set; }= string.Empty;
-            public TokenType TokenType { get; set; }
+          
         }
-        public enum TokenType
-        {
-            AdminUser =1,
-            Admin
-        }
+      
         public class UserAdminProfileObj
         {
             public string FullName { get; set; }= string.Empty;

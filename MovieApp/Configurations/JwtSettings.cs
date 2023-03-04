@@ -3,11 +3,11 @@
     public class JwtSettings
     {
         public string Secret { get; set; } = string.Empty;
-        public TimeOnly TokenLifeSpan { get; set; } = new TimeOnly();
+        public TimeSpan TokenLifeSpan { get; set; } = new TimeSpan();
     }
     public interface IJwtSettings
     {
         string Secret { get; set; }
-        TimeOnly TokenLifeSpan { get; set; }
+        TimeSpan TokenLifeSpan { get; set; }
     }
 }

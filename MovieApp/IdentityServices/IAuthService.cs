@@ -6,7 +6,7 @@ namespace GOSBackend.IdentityServices
     public interface IAuthService
     {
         Task<AuthenticationResult> RegisterAdmin(RegisterObj model);
-        Task<AuthResponse> VerifyAdminRegister(AdminVerifyObj request);
+        Task<AuthResponse> VerifyAdminRegister(VerifyObj request);
         Task<AuthResponse> LoginAdmin(LoginCommand request);
     }
 }

@@ -46,8 +46,8 @@ namespace GOSBackend.Controllers
             }
         }
 
-        [HttpPost(APIRoutes.Admin.ADMIN_VERIFY)]
-        public async Task<ActionResult<AuthResponse>> VerifyAdmin([FromBody] AdminVerifyObj model)
+        [HttpPost(APIRoutes.Users.USER_VERIFY)]
+        public async Task<ActionResult<AuthResponse>> VerifyAdmin([FromBody] VerifyObj model)
         {
             try
             {
