@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using MovieApp.Configurations;
 using MovieApp.Data;
 using MovieApp.SqlTables;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace GOSBackend.DI_Intallers
@@ -60,6 +61,12 @@ namespace GOSBackend.DI_Intallers
 
             var baseuri = new BaseURIs();
             configuration.GetSection(nameof(BaseURIs)).Bind(baseuri);
+            services.AddHttpClient("OMDB", client =>
+            {
+                client.BaseAddress = new Uri($"{baseuri.OMDBAPI}?apikey={baseuri.OMDPKey}");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            });
 
 
             services.AddCors(options =>

@@ -23,7 +23,7 @@ namespace MovieApp.Requests
         public async Task<OmbdResult> GetMovie(SearchParams search)
         {
             OmbdResult responseObj = new OmbdResult();
-            var client = _httpClientFactory.CreateClient("FLUTTERWAVE");
+            var client = _httpClientFactory.CreateClient("OMDB");
             var url = $"&s={search.SearchValue}&page={search.Page}";
 
             return await _retryPolicy.ExecuteAsync(async () =>
