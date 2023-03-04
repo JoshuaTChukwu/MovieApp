@@ -24,13 +24,14 @@ namespace MovieApp.Requests
         {
             OmbdResult responseObj = new OmbdResult();
             var client = _httpClientFactory.CreateClient("OMDB");
-            var url = $"&s={search.SearchValue}&page={search.Page}";
-
+            var url = $"s={search.SearchValue}&page={search.Page}";
+            var uri = client.BaseAddress.ToString() + url;
+            client.BaseAddress= null;
             return await _retryPolicy.ExecuteAsync(async () =>
             {
                 try
                 {
-                   var result = await client.GetAsync(url);
+                   var result = await client.GetAsync(uri);
                    
                     var data = await result.Content.ReadAsStringAsync();
                     responseObj = JsonConvert.DeserializeObject<OmbdResult>(data);
@@ -51,12 +52,13 @@ namespace MovieApp.Requests
             OmdbSingleResult responseObj = new OmdbSingleResult();
             var client = _httpClientFactory.CreateClient("OMDB");
             var url = $"&i={omdbid}";
-
+            var uri = client.BaseAddress.ToString() + url;
+            client.BaseAddress = null;
             return await _retryPolicy.ExecuteAsync(async () =>
             {
                 try
                 {
-                    var result = await client.GetAsync(url);
+                    var result = await client.GetAsync(uri);
 
                     var data = await result.Content.ReadAsStringAsync();
                     responseObj = JsonConvert.DeserializeObject<OmdbSingleResult>(data);

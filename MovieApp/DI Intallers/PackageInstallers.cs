@@ -57,13 +57,13 @@ namespace GOSBackend.DI_Intallers
                 .AddEntityFrameworkStores<DataBaseContext>();
             services.AddSingleton<IBaseURIs>(configuration.GetSection("BaseURIs").Get<BaseURIs>());
             services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
-            services.AddSingleton<IJwtSettings>(configuration.GetSection("EmailConfiguration").Get<JwtSettings>());
+            services.AddSingleton<IJwtSettings>(configuration.GetSection("JwtSettings").Get<JwtSettings>());
 
             var baseuri = new BaseURIs();
             configuration.GetSection(nameof(BaseURIs)).Bind(baseuri);
             services.AddHttpClient("OMDB", client =>
             {
-                client.BaseAddress = new Uri($"{baseuri.OMDBAPI}?apikey={baseuri.OMDPKey}");
+                client.BaseAddress = new Uri($"{baseuri.OMDBAPI}?apikey={baseuri.OMDPKey}&");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             });
