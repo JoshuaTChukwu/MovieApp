@@ -15,6 +15,10 @@ namespace MovieApp.Contracts.Common
             public string FriendlyMessage { get; set; } = string.Empty;
             public string TechnicalMessage { get; set; } = string.Empty;
         }
+        public class AuthenticationResult
+        {
+            public ApiResponse Status { get; set; } = new ApiResponse();
+        }
         public enum Gender
         {
             Male =1,

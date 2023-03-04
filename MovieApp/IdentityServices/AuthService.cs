@@ -1,22 +1,18 @@
-﻿using GOSBackend.Data;
-using GOSBackend.Handlers;
+﻿using GOSBackend.Handlers;
 using GOSBackend.Requests;
 using GOSBackend.SqlTables;
-using GOSLibraries.GOS_API_Response;
-using GOSLibraries.GOS_Error_logger.Service;
-using GOSLibraries.GOS_Financial_Identity;
-using GOSLibraries.Options;
-using GOSLibraries.URI;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using MovieApp.Configurations;
+using MovieApp.Data;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using static GOSBackend.Contracts.Common.AuxillaryObjs;
-using static GOSBackend.Contracts.User_Identity_Obj.AdminIdentityObjs;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
+using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
 namespace GOSBackend.IdentityServices
 {
@@ -25,65 +21,57 @@ namespace GOSBackend.IdentityServices
         private readonly UserManager<Users> _userManager;
         private readonly IWebHostEnvironment _environment;
         private readonly ILogger<IAuthService> _logger;
-        private readonly IBaseURIs _uri;
         private readonly IEmailHelper _email;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IJwtSettings _jwtSettings;
         private readonly DataBaseContext _dbContext;
         private readonly ILoginServices _login;
-        public AuthService(UserManager<Users> userManager, IWebHostEnvironment environment, ILogger<IAuthService> logger, IBaseURIs baseURIs, IEmailHelper emailHelper
-, JwtSettings jwtSettings, DataBaseContext dataBaseContext,  ILoginServices services          )
+        public AuthService(UserManager<Users> userManager, IWebHostEnvironment environment, ILogger<IAuthService> logger, IEmailHelper emailHelper
+, IJwtSettings jwtSettings, DataBaseContext dataBaseContext,  ILoginServices services          )
         {
             _userManager = userManager;
             _environment = environment;
             _logger = logger;
-            _uri = baseURIs;
+         
             _email = emailHelper;
             _jwtSettings = jwtSettings;
             _dbContext = dataBaseContext;
             _login = services;
         }
-        public async Task<AuthenticationResult> RegisterAdmin(AdminRegisterObj model)
+        public async Task<AuthenticationResult> RegisterAdmin(RegisterObj model)
         {
-            var response = new AuthenticationResult() {Status =new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage { FriendlyMessage = "" } } };
+            var response = new AuthenticationResult() {Status =new ApiResponse { IsSuccess = false,FriendlyMessage =""  } };
             try
             {
-                if(model.Email.ToLower().Contains("godp.com.ng") == false && model.Email.ToLower().Contains("godp.co.uk") == false)
-                {
-                    response.Status.Message.FriendlyMessage = "This account is not eligible to be an admin";
-                    return response;
-                }
+               
                  var checkEmail = await _userManager.FindByEmailAsync(model.Email);
                  if(checkEmail != null)
                 {
-                    response.Status.Message.FriendlyMessage = "Email alrady exists";
+                    response.Status.FriendlyMessage = "Email alrady exists";
                     return response;
                 }
                 var checkUsername = await _userManager.FindByNameAsync(model.UserName);
                 if(checkUsername != null)
                 {
-                    response.Status.Message.FriendlyMessage = "Username already exists";
+                    response.Status.FriendlyMessage = "Username already exists";
                     return response;
                 }
                 var newUser = new Users
                 {
                     Email = model.Email,
                     UserName = model.UserName,
-                    UserType = (int)UserType.Admin,
-                    AdminActivated = false,
-                    Gender = (int)model.Gender,
                     FullName = model.FullName,
                     EmailConfirmed = false,
                     IsActivatad = false,
-                    RoleName = model.RoleName,
+                   
                 };
                 var register = await _userManager.CreateAsync(newUser,model.Password);
                 if(register.Succeeded == false)
                 {
-                    response.Status.Message.FriendlyMessage = register.Errors.FirstOrDefault()?.Description ??"error occured";
+                    response.Status.FriendlyMessage = register.Errors.FirstOrDefault()?.Description ??"error occured";
                     return response;
                 }
-                response.Status.IsSuccessful = true;
-                response.Status.Message.FriendlyMessage = "Users registration is sucessful, kindly check ur email for comfirmation";
+                response.Status.IsSuccess = true;
+                response.Status.FriendlyMessage = "Users registration is sucessful, kindly check ur email for comfirmation";
                 var filePath = String.Concat(_environment.WebRootPath, "/mailTemplateReg.html");
                 var claims = new List<Claim>
                             {
@@ -102,9 +90,9 @@ namespace GOSBackend.IdentityServices
             {
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
-                response.Status.IsSuccessful = false;
-                response.Status.Message.FriendlyMessage = "An Unexpected error occured";
-                response.Status.Message.TechnicalMessage = ex?.Message;
+                response.Status.IsSuccess = false;
+                response.Status.FriendlyMessage = "An Unexpected error occured";
+                response.Status.TechnicalMessage = ex?.Message;
                 return response;
             }
         }

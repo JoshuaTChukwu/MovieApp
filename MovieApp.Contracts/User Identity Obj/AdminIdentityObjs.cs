@@ -7,16 +7,14 @@ using static MovieApp.Contracts.Common.AuxillaryObjs;
 
 namespace MovieApp.Contracts.User_Identity_Obj
 {
-    public class AdminIdentityObjs
+    public class IdentityObjs
     {
-        public class AdminRegisterObj
+        public class RegisterObj
         {
             public string UserName { get; set; }= string.Empty;
             public string Password { get; set; }= string.Empty;
             public string Email { get; set; }= string.Empty;
             public string FullName { get; set; }= string.Empty;
-            public string RoleName { get; set; }= string.Empty;
-            public Gender Gender { get; set; }
         }
         public class AdminVerifyObj
         {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace GOSBackend.Data
+namespace MovieApp.Data
 {
     public class DataBaseContext : IdentityDbContext<Users>
     {

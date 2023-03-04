@@ -1,12 +1,9 @@
-using GOSBackend.Contracts.Common;
-using GOSBackend.Contracts.User_Identity_Obj;
 using GOSBackend.Handlers;
 using GOSBackend.IdentityServices;
-using GOSLibraries.GOS_API_Response;
-using GOSLibraries.GOS_Error_logger.Service;
-using GOSLibraries.GOS_Financial_Identity;
 using Microsoft.AspNetCore.Mvc;
-using static GOSBackend.Contracts.User_Identity_Obj.AdminIdentityObjs;
+using MovieApp.Contracts.Common;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
+using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
 namespace GOSBackend.Controllers
 {
@@ -27,7 +24,7 @@ namespace GOSBackend.Controllers
         }
 
         [HttpPost(APIRoutes.Admin.ADMIN_REGISTER)]
-        public async Task<ActionResult<AuthenticationResult>> RegisterAdmin([FromBody] AdminRegisterObj model)
+        public async Task<ActionResult<AuthenticationResult>> RegisterAdmin([FromBody] RegisterObj model)
         {
             try
             {
@@ -43,7 +40,7 @@ namespace GOSBackend.Controllers
                 _logger.LogError($"ErrorID : {errorCode} Ex : { ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 return BadRequest(new AuthenticationResult
                 {
-                    Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage { FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message, MessageId = errorCode } }
+                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message }
                 });
             }
         }
