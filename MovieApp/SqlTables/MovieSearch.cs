@@ -9,6 +9,6 @@ namespace MovieApp.SqlTables
         public string UserId { get; set; } = string.Empty;
         public string MovieName { get; set; } = string.Empty;
         public DateTime DateSearch { get; set; } = DateTime.Now;
-        public Users User { get; set; } = new Users();
+        public virtual Users User { get; set; } = new Users();
     }
 }
