@@ -1,6 +1,8 @@
-﻿using Polly;
+﻿using Newtonsoft.Json;
+using Polly;
 using Polly.Retry;
 using System.Net.Http;
+using static MovieApp.Contracts.Common.OMDBAPIRequestObjs;
 
 namespace MovieApp.Requests
 {
@@ -18,52 +20,30 @@ namespace MovieApp.Requests
 
              TimeSpan.FromSeconds(times * 2));
         }
-        //public async Task<BvnDetailsRespObj> validateBvnDetails(string url)
-        //{
-        //    BvnDetailsRespObj responseObj = new BvnDetailsRespObj();
-        //    var flutterWaveClient = _httpClientFactory.CreateClient("FLUTTERWAVE");
-        //    var keys = await _serverRequest.GetFlutterWaveKeys();
-        //    flutterWaveClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + keys.keys.secret_keys);
+        public async Task<OmbdResult> GetMovie()
+        {
+            OmbdResult responseObj = new OmbdResult();
+            var client = _httpClientFactory.CreateClient("FLUTTERWAVE");
+            var url = "&s=young&page=2";
 
-        //    return await _retryPolicy.ExecuteAsync(async () =>
-        //    {
-        //        try
-        //        {
-        //            result = await flutterWaveClient.GetAsync(url);
-        //            if (!result.IsSuccessStatusCode)
-        //            {
-        //                var data1 = await result.Content.ReadAsStringAsync();
-        //                responseObj = JsonConvert.DeserializeObject<BvnDetailsRespObj>(data1);
-        //                return new BvnDetailsRespObj
-        //                {
-        //                    status = "BVN: " + responseObj.message
-        //                };
-        //            }
-        //            var data = await result.Content.ReadAsStringAsync();
-        //            responseObj = JsonConvert.DeserializeObject<BvnDetailsRespObj>(data);
-        //        }
-        //        catch (Exception ex) { throw ex; }
-        //        if (responseObj == null)
-        //        {
-        //            return new BvnDetailsRespObj
-        //            {
-        //                status = "Not Successful"
-        //            };
-        //        }
-        //        if (responseObj.status == "success")
-        //        {
-        //            return new BvnDetailsRespObj
-        //            {
-        //                status = responseObj.status,
-        //                data = responseObj.data,
-        //                message = responseObj.message
-        //            };
-        //        }
-        //        return new BvnDetailsRespObj
-        //        {
-        //            status = "BVN: " + responseObj.message
-        //        };
-        //    });
-        //}
+            return await _retryPolicy.ExecuteAsync(async () =>
+            {
+                try
+                {
+                   var result = await client.GetAsync(url);
+                   
+                    var data = await result.Content.ReadAsStringAsync();
+                    responseObj = JsonConvert.DeserializeObject<OmbdResult>(data);
+                    if(responseObj == null)
+                    {
+                        return new OmbdResult();
+                    }
+                    return responseObj;
+                }
+                catch (Exception) { throw; }
+               
+               
+            });
+        }
     }
 }
