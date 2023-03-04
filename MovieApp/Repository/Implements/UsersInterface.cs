@@ -1,4 +1,5 @@
 ﻿using MovieApp.Data;
+using MovieApp.Repository.Interface;
 using MovieApp.Requests;
 using MovieApp.SqlTables;
 using Polly;
@@ -8,7 +9,7 @@ using static MovieApp.Contracts.User_Identity_Obj.UsersOperationalObjs;
 
 namespace MovieApp.Repository.Implements
 {
-    public class UsersInterface
+    public class UsersInterface : IUsersInterface
     {
         private readonly DataBaseContext _dBContext;
         private readonly IAPIHelper _api;

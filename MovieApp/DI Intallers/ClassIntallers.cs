@@ -1,5 +1,7 @@
 ﻿using MovieApp.Handlers;
 using MovieApp.IdentityServices;
+using MovieApp.Repository.Implements;
+using MovieApp.Repository.Interface;
 using MovieApp.Requests;
 
 namespace GOSBackend.DI_Intallers
@@ -13,6 +15,7 @@ namespace GOSBackend.DI_Intallers
             services.AddScoped<ILoginServices, LoginServicecs>();
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IAPIHelper, APIHelper>();
+            services.AddScoped<IUsersInterface, UsersInterface>();
         }
     }
 }
