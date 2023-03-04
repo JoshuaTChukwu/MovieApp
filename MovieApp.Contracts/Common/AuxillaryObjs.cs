@@ -14,6 +14,7 @@ namespace MovieApp.Contracts.Common
             public bool IsSuccess { get; set; }
             public string FriendlyMessage { get; set; } = string.Empty;
             public string TechnicalMessage { get; set; } = string.Empty;
+            public string? ErrorCode { get; set; }
         }
         public class AuthenticationResult
         {

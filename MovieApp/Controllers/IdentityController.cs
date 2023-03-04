@@ -2,6 +2,7 @@ using GOSBackend.Handlers;
 using GOSBackend.IdentityServices;
 using Microsoft.AspNetCore.Mvc;
 using MovieApp.Contracts.Common;
+using MovieApp.Helpers;
 using static MovieApp.Contracts.Common.AuxillaryObjs;
 using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
@@ -23,13 +24,13 @@ namespace GOSBackend.Controllers
             _profile = profile;
         }
 
-        [HttpPost(APIRoutes.Admin.ADMIN_REGISTER)]
+        [HttpPost(APIRoutes.Users.USER_REGISTER)]
         public async Task<ActionResult<AuthenticationResult>> RegisterAdmin([FromBody] RegisterObj model)
         {
             try
             {
                 var response = await _auth.RegisterAdmin(model);
-                if(response.Status.IsSuccessful)
+                if(response.Status.IsSuccess)
                     return Ok(response);
                 return BadRequest(response);
             }
@@ -40,7 +41,7 @@ namespace GOSBackend.Controllers
                 _logger.LogError($"ErrorID : {errorCode} Ex : { ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 return BadRequest(new AuthenticationResult
                 {
-                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message }
+                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.InnerException?.Message ??ex?.Message??"" }
                 });
             }
         }
