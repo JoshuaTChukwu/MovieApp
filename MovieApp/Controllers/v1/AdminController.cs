@@ -1,9 +1,6 @@
 ﻿using GOSBackend.Contracts.Common;
 using GOSBackend.Handlers;
 using GOSBackend.Repository.Interface;
-using GOSLibraries.GOS_API_Response;
-using GOSLibraries.GOS_Error_logger.Service;
-using GOSLibraries.GOS_Financial_Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static GOSBackend.Contracts.Admin_Objs.HelpObjs;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GOSBackend.Contracts.Common
+namespace MovieApp.Contracts.Common
 {
     public static class APIRoutes
     {
