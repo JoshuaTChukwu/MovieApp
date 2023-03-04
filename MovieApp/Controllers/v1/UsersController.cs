@@ -46,7 +46,7 @@ namespace GOSBackend.Controllers.v1
             }
         }
 
-        [HttpGet(APIRoutes.Users.SEARCH_MOVIE)]
+        [HttpGet(APIRoutes.Users.SINGLE_MOVIE)]
         public ActionResult<SingleSearchResponseObj> SearchMovie([FromQuery] string OmdbId)
         {
             try
@@ -62,6 +62,28 @@ namespace GOSBackend.Controllers.v1
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 return BadRequest(new SingleSearchResponseObj
+                {
+                    Status = new ApiResponse { IsSuccess = false, FriendlyMessage = ex?.Message ?? "", TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "", ErrorCode = errorCode }
+                });
+            }
+        }
+
+        [HttpGet(APIRoutes.Users.LATEST_REQUEST)]
+        public ActionResult<QueriesSearched> GetLatestsearched()
+        {
+            try
+            {
+                var response = _service.lastLatestSearch();
+                if (response.Status.IsSuccess)
+                    return Ok(response);
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+
+                var errorCode = ErrorID.Generate(5);
+                _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
+                return BadRequest(new QueriesSearched
                 {
                     Status = new ApiResponse { IsSuccess = false, FriendlyMessage = ex?.Message ?? "", TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "", ErrorCode = errorCode }
                 });
