@@ -1,6 +1,6 @@
 ﻿namespace MovieApp.Configurations
 {
-    public class JwtSettings
+    public class JwtSettings : IJwtSettings
     {
         public string Secret { get; set; } = string.Empty;
         public TimeSpan TokenLifeSpan { get; set; } = new TimeSpan();

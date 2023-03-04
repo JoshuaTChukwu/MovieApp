@@ -26,13 +26,14 @@ namespace GOSBackend.IdentityServices
         private readonly IJwtSettings _jwtSettings;
         private readonly DataBaseContext _dbContext;
         private readonly ILoginServices _login;
+        private readonly IBaseURIs _uri;
         public AuthService(UserManager<Users> userManager, IWebHostEnvironment environment, ILogger<IAuthService> logger, IEmailHelper emailHelper
-, IJwtSettings jwtSettings, DataBaseContext dataBaseContext,  ILoginServices services          )
+, IJwtSettings jwtSettings, DataBaseContext dataBaseContext,  ILoginServices services, IBaseURIs baseURIs          )
         {
             _userManager = userManager;
             _environment = environment;
             _logger = logger;
-         
+            _uri = baseURIs;
             _email = emailHelper;
             _jwtSettings = jwtSettings;
             _dbContext = dataBaseContext;
@@ -81,7 +82,7 @@ namespace GOSBackend.IdentityServices
                                 new Claim("securedpin","SecurerPassage@#123")
                             };
                 var token = CreateToken(claims);
-                var link = $"{_uri.SelfClient}/verify?g={token}";
+                var link = $"{_uri.MainClient}/verify?g={token}";
                 var msg = File.ReadAllText(filePath);
                 msg = msg.Replace("{Name}", model.FullName).Replace("{Link}", link);
                 var sendMail = _email.SendMail(model.Email, model.FullName, "Verification Email",msg);
@@ -135,7 +136,7 @@ namespace GOSBackend.IdentityServices
                 content3.Append("<p>You can now login</p>");
                 
                 var body2 =File.ReadAllText(String.Concat(_environment.WebRootPath, "/mailTemplateWithButton.html"));
-                var link = $"{_uri.SelfClient}/login";
+                var link = $"{_uri.MainClient}/login";
                 body2 = body2.Replace("{Name}", user_account.FullName).Replace("{Link}", link).Replace("{Body}", content3.ToString()).Replace("{Button}", "Login");
                 var mail = _email.SendMail(user_account.Email, user_account.FullName, "Account Activation", body2);
                 response.Status.IsSuccess = true;

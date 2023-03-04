@@ -1,15 +1,12 @@
 ﻿using GOSBackend.Configurations;
-using GOSBackend.Data;
-using GOSBackend.SqlTables;
-using GOSLibraries.GOS_Error_logger.Service;
-using GOSLibraries.Options;
-using GOSLibraries.URI;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Support.SDK;
+using MovieApp.Configurations;
+using MovieApp.Data;
+using MovieApp.SqlTables;
 using System.Text;
 
 namespace GOSBackend.DI_Intallers
@@ -60,9 +57,10 @@ namespace GOSBackend.DI_Intallers
             services.AddSingleton<ILoggerService, LoggerService>();
             services.AddSingleton<IBaseURIs>(configuration.GetSection("BaseURIs").Get<BaseURIs>());
             services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
+            services.AddSingleton<IJwtSettings>(configuration.GetSection("EmailConfiguration").Get<JwtSettings>());
 
 
-           
+
 
             services.AddCors(options =>
             {
