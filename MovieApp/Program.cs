@@ -13,20 +13,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => {
     x.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "GOS SOftware Website",
+        Title = "Movie App",
         Version = "V1",
         Description = "An API to perform business automated operations",
-        TermsOfService = new Uri("http://www.godp.co.uk/"),
+        TermsOfService = new Uri("https://github.com/JoshuaTChukwu"),
         Contact = new OpenApiContact
         {
             Name = "Joshua Chukwu",
-            Email = "joshua.chukwu@godp.com.uk",
+            Email = "jchukwug1@gmail.com",
             Url = new Uri("https://github.com/JoshuaTChukwu"),
         },
         License = new OpenApiLicense
         {
-            Name = "GODP API LICX",
-            Url = new Uri("http://www.godp.co.uk/"),
+            Name = "Joshua API LICX",
+            Url = new Uri("https://github.com/JoshuaTChukwu/"),
         },
 
     });
@@ -41,7 +41,7 @@ builder.Services.AddSwaggerGen(x => {
                 };
     x.AddSecurityDefinition("Bearer ", new OpenApiSecurityScheme
     {
-        Description = "GODP Cloud Authorization header using bearer scheme",
+        Description = "Movie App Cloud Authorization header using bearer scheme",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
