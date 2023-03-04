@@ -4,10 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GOSBackend.Contracts.Common
+namespace MovieApp.Contracts.Common
 {
     public class AuxillaryObjs
     {
+
+        public class ApiResponse
+        {
+            public bool IsSuccess { get; set; }
+            public string FriendlyMessage { get; set; } = string.Empty;
+            public string TechnicalMessage { get; set; } = string.Empty;
+        }
         public enum Gender
         {
             Male =1,
@@ -49,7 +56,7 @@ namespace GOSBackend.Contracts.Common
         public class DeleteResObj
         {
             public bool IsDeleted { get; set; }
-            public APIResponseStatus Status { get; set; } = new APIResponseStatus();
+            public ApiResponse Status { get; set; } = new ApiResponse();
         }
     }
 }

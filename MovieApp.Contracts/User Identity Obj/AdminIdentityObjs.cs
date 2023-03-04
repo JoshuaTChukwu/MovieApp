@@ -1,12 +1,11 @@
-﻿using GOSLibraries.GOS_API_Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static GOSBackend.Contracts.Common.AuxillaryObjs;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
 
-namespace GOSBackend.Contracts.User_Identity_Obj
+namespace MovieApp.Contracts.User_Identity_Obj
 {
     public class AdminIdentityObjs
     {
@@ -38,7 +37,7 @@ namespace GOSBackend.Contracts.User_Identity_Obj
         public class UserAdminProfileResObj
         {
             public UserAdminProfileObj Profile {get; set; } = new UserAdminProfileObj();
-            public APIResponseStatus Status { get; set; } = new APIResponseStatus();
+            public ApiResponse Status { get; set; } = new ApiResponse();
         }
     }
 }

@@ -30,20 +30,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GOSBackend.Contracts\GOSBackend.Contracts.csproj" />
+    <ProjectReference Include="..\MovieApp.Contracts\MovieApp.Contracts.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\Images\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="GOSLibraries">
-      <HintPath>GOS Library\GOSLibraries.dll</HintPath>
-    </Reference>
-    <Reference Include="Support.SDK">
-      <HintPath>GOS Library\Support.SDK.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
