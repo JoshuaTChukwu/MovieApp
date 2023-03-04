@@ -59,5 +59,13 @@ namespace MovieApp.Repository.Implements
             }
             throw new Exception("Movie not found");
         }
+        public IEnumerable<string> lastLatestSearch()
+        {
+            var response = (from a in _dBContext.MovieSearch
+                            where a.UserId == _userId
+                            orderby a.DateSearch descending
+                            select a.MovieName).Take(5).ToList();
+            return response;
+        }
     }
 }
