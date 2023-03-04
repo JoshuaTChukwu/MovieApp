@@ -31,5 +31,11 @@ namespace MovieApp.Contracts.User_Identity_Obj
 
             public ApiResponse Status { get; set; } = new ApiResponse();
         }
+
+        public class QueriesSearched
+        {
+            public IEnumerable<string> Queries { get; set; } = Enumerable.Empty<string>();
+            public ApiResponse Status { get; set; } = new ApiResponse();
+        }
     }
 }

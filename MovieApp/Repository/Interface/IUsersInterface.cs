@@ -7,6 +7,6 @@ namespace MovieApp.Repository.Interface
     {
         SearchResponseObj seachMovie(SearchParams search);
         SingleSearchResponseObj GetMovie(string searchId);
-        IEnumerable<string> lastLatestSearch();
+        QueriesSearched lastLatestSearch();
     }
 }

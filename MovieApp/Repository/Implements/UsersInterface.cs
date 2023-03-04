@@ -81,12 +81,17 @@ namespace MovieApp.Repository.Implements
             }
             throw new Exception("Movie not found");
         }
-        public IEnumerable<string> lastLatestSearch()
+        public QueriesSearched lastLatestSearch()
         {
-            var response = (from a in _dBContext.MovieSearch
+            var result = (from a in _dBContext.MovieSearch
                             where a.UserId == _userId
                             orderby a.DateSearch descending
                             select a.MovieName).Take(5).ToList();
+            var response = new QueriesSearched
+            {
+                Queries = result,
+                Status = new ApiResponse { IsSuccess = true }
+            };
             return response;
         }
     }
