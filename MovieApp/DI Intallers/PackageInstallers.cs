@@ -58,7 +58,8 @@ namespace GOSBackend.DI_Intallers
             services.AddSingleton<IEmailConfiguration>(configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>());
             services.AddSingleton<IJwtSettings>(configuration.GetSection("EmailConfiguration").Get<JwtSettings>());
 
-
+            var baseuri = new BaseURIs();
+            configuration.GetSection(nameof(BaseURIs)).Bind(baseuri);
 
 
             services.AddCors(options =>

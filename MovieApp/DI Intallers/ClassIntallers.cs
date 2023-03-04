@@ -12,6 +12,7 @@ namespace GOSBackend.DI_Intallers
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ILoginServices, LoginServicecs>();
             services.AddScoped<IProfileService, ProfileService>();
+            services.AddScoped<IAPIHelper, APIHelper>();
         }
     }
 }
