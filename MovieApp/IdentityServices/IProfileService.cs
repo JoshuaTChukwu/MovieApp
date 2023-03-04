@@ -1,9 +1,9 @@
-﻿using static GOSBackend.Contracts.User_Identity_Obj.AdminIdentityObjs;
+﻿using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
 
 namespace GOSBackend.IdentityServices
 {
     public interface IProfileService
     {
-        Task<UserAdminProfileResObj> GetAdminProfile();
+        Task<UserProfileResObj> GetAdminProfile();
     }
 }

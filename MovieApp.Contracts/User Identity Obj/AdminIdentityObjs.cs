@@ -28,15 +28,15 @@ namespace MovieApp.Contracts.User_Identity_Obj
         }
 
 
-        public class UserAdminProfileObj
+        public class UserProfileObj
         {
             public string FullName { get; set; }= string.Empty;
             public string Gender { get; set; }= string.Empty;
             public string Email { get; set; }= string.Empty;
         }
-        public class UserAdminProfileResObj
+        public class UserProfileResObj
         {
-            public UserAdminProfileObj Profile {get; set; } = new UserAdminProfileObj();
+            public UserProfileObj Profile {get; set; } = new UserProfileObj();
             public ApiResponse Status { get; set; } = new ApiResponse();
         }
     }

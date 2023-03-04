@@ -1,9 +1,8 @@
-﻿using GOSBackend.SqlTables;
-using GOSLibraries.GOS_API_Response;
-using GOSLibraries.GOS_Error_logger.Service;
+﻿using MovieApp.SqlTables;
 using Microsoft.AspNetCore.Identity;
-using static GOSBackend.Contracts.Common.AuxillaryObjs;
-using static GOSBackend.Contracts.User_Identity_Obj.AdminIdentityObjs;
+using static MovieApp.Contracts.User_Identity_Obj.IdentityObjs;
+using static MovieApp.Contracts.Common.AuxillaryObjs;
+using MovieApp.Helpers;
 
 namespace GOSBackend.IdentityServices
 {
@@ -18,18 +17,17 @@ namespace GOSBackend.IdentityServices
             _logger = logger;
             _cotextAccessor = cotextAccessor;
         }
-        public async Task<UserAdminProfileResObj> GetAdminProfile()
+        public async Task<UserProfileResObj> GetAdminProfile()
         {
-            var response = new UserAdminProfileResObj
+            var response = new UserProfileResObj
             {
                
-                Status = new APIResponseStatus
+                Status = new ApiResponse
                 {
-                    IsSuccessful = false,
-                    Message = new APIResponseMessage
-                    {
-                        FriendlyMessage = ""
-                    }
+                    IsSuccess = false,
+                   
+                   FriendlyMessage = ""
+                    
                 }
             };
             
@@ -39,18 +37,18 @@ namespace GOSBackend.IdentityServices
                 var user = await _userManager.FindByIdAsync(userId);
                 if (user == null)
                 {
-                    response.Status.Message.FriendlyMessage = "User not found";
+                    response.Status.FriendlyMessage = "User not found";
                     return response;
                 }
-                var profile = new UserAdminProfileObj
+                var profile = new UserProfileObj
                 {
                     FullName = user.FullName,
                     Email = user.Email,
-                    Gender = ((Gender)user.Gender).ToString()
+                   
                 };
                 response.Profile = profile;
-                response.Status.IsSuccessful = true;
-                response.Status.Message.FriendlyMessage = "Sucessful";
+                response.Status.IsSuccess = true;
+                response.Status.FriendlyMessage = "Sucessful";
                 return response;
             }
             catch (Exception ex)
@@ -58,8 +56,9 @@ namespace GOSBackend.IdentityServices
 
                 var errorCode = ErrorID.Generate(5);
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
-                response.Status.Message.FriendlyMessage = ex?.Message ?? ex?.InnerException?.Message;
-                response.Status.Message.TechnicalMessage = ex?.ToString();
+                response.Status.FriendlyMessage = $"An error occured, Kindly submit this issue with id {errorCode} to the Admin";
+                response.Status.TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "";
+                response.Status.ErrorCode = errorCode;
                 return response;
             }
         }

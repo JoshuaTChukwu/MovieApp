@@ -75,7 +75,7 @@ namespace GOSBackend.Controllers
             try
             {
                 var response = await _auth.LoginAdmin(model);
-                if (response.Status.IsSuccessful)
+                if (response.Status.IsSuccess)
                     return Ok(response);
                 return BadRequest(response);
             }
@@ -86,7 +86,7 @@ namespace GOSBackend.Controllers
                 _logger.LogError($"ErrorID : {errorCode} Ex : {ex?.InnerException?.Message ?? ex?.Message} ErrorStack : {ex?.StackTrace}");
                 return BadRequest(new AuthenticationResult
                 {
-                    Status = new APIResponseStatus { IsSuccessful = false, Message = new APIResponseMessage { FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.Message, MessageId = errorCode } }
+                    Status = new ApiResponse { IsSuccess = false,  FriendlyMessage = "Error Occurred", TechnicalMessage = ex?.InnerException?.Message ?? ex?.Message ?? "", ErrorCode = errorCode  }
                 });
             }
         }
