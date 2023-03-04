@@ -45,10 +45,37 @@ namespace MovieApp.Requests
                
             });
         }
+
+        public async Task<OmdbSingleResult> GetSingleMovie(string omdbid)
+        {
+            OmdbSingleResult responseObj = new OmdbSingleResult();
+            var client = _httpClientFactory.CreateClient("OMDB");
+            var url = $"&i={omdbid}";
+
+            return await _retryPolicy.ExecuteAsync(async () =>
+            {
+                try
+                {
+                    var result = await client.GetAsync(url);
+
+                    var data = await result.Content.ReadAsStringAsync();
+                    responseObj = JsonConvert.DeserializeObject<OmdbSingleResult>(data);
+                    if (responseObj == null)
+                    {
+                        return new OmdbSingleResult();
+                    }
+                    return responseObj;
+                }
+                catch (Exception) { throw; }
+
+
+            });
+        }
     }
 
     public interface IAPIHelper
     {
         Task<OmbdResult> GetMovie(SearchParams search);
+        Task<OmdbSingleResult> GetSingleMovie(string omdbid);
     }
 }
