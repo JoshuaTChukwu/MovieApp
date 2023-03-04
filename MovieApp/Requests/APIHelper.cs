@@ -6,7 +6,7 @@ using static MovieApp.Contracts.Common.OMDBAPIRequestObjs;
 
 namespace MovieApp.Requests
 {
-    public class APIHelper
+    public class APIHelper : IAPIHelper
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly AsyncRetryPolicy _retryPolicy;
@@ -20,11 +20,11 @@ namespace MovieApp.Requests
 
              TimeSpan.FromSeconds(times * 2));
         }
-        public async Task<OmbdResult> GetMovie()
+        public async Task<OmbdResult> GetMovie(SearchParams search)
         {
             OmbdResult responseObj = new OmbdResult();
             var client = _httpClientFactory.CreateClient("FLUTTERWAVE");
-            var url = "&s=young&page=2";
+            var url = $"&s={search.SearchValue}&page={search.Page}";
 
             return await _retryPolicy.ExecuteAsync(async () =>
             {
@@ -45,5 +45,10 @@ namespace MovieApp.Requests
                
             });
         }
+    }
+
+    public interface IAPIHelper
+    {
+        Task<OmbdResult> GetMovie(SearchParams search);
     }
 }

@@ -23,6 +23,11 @@ namespace MovieApp.Contracts.Common
             public string Response { get; set; } = "False";
             public int TotalResults { get; set; } = 0;
         }
+        public class SearchParams
+        {
+            public string SearchValue { get; set; } = string.Empty;
+            public int Page { get; set; } = 1;
+        }
 
     }
 }
