@@ -79,6 +79,7 @@ namespace GOSBackend.DI_Intallers
                     .AllowAnyMethod();
                 });
             });
+            services.AddMvc();
             services.AddDetection();
 
         }
