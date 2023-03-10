@@ -1,4 +1,5 @@
-﻿using MovieApp.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using MovieApp.Data;
 using MovieApp.Repository.Interface;
 using MovieApp.Requests;
 using MovieApp.SqlTables;
@@ -14,11 +15,13 @@ namespace MovieApp.Repository.Implements
         private readonly DataBaseContext _dBContext;
         private readonly IAPIHelper _api;
         private string _userId;
-        public UsersInterface(DataBaseContext dBContext, IAPIHelper api, IHttpContextAccessor httpContextAccessor)
+        private readonly UserManager<Users> _user;
+        public UsersInterface(DataBaseContext dBContext, IAPIHelper api, IHttpContextAccessor httpContextAccessor, UserManager<Users> userManager)
         {
             _dBContext = dBContext;
             _api = api;
             _userId = httpContextAccessor?.HttpContext?.User?.FindFirst("userId")?.Value ?? string.Empty;
+            _user = userManager;
         }
 
         public SearchResponseObj seachMovie(SearchParams search)
@@ -42,11 +45,12 @@ namespace MovieApp.Repository.Implements
                 {
                     response.Response.HasPrev = false;
                 }
+                var user =  _user.FindByIdAsync(_userId).Result;
                 var newSearchEntry = new MovieSearch
                 {
                     DateSearch = DateTime.Now,
                     MovieName = search.SearchValue,
-                    UserId = _userId,
+                    User = user,
                 };
                 _dBContext.Add(newSearchEntry);
                 if(movies.TotalResults > (search.Page * 10))
@@ -86,7 +90,7 @@ namespace MovieApp.Repository.Implements
             var result = (from a in _dBContext.MovieSearch
                             where a.UserId == _userId
                             orderby a.DateSearch descending
-                            select a.MovieName).Take(5).ToList();
+                            select a.MovieName).Distinct().Take(5).ToList();
             var response = new QueriesSearched
             {
                 Queries = result,
